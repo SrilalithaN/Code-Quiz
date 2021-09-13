@@ -78,5 +78,111 @@ function render(questionIndex) {
   });
 
   // comapring the userchoice to correct answer
-  function compare(event) {}
+  function compare(event) {
+    var selection = event.target;
+    if (selection.matches("li")) {
+      var createDiv = document.createElement("div");
+      createDiv.setAttribute("id", "newDiv");
+      if (selection.textContent === questions[questionIndex].answer) {
+        score++;
+        createDiv.textContent =
+          "You got it Correct! The answer is: " +
+          questions[questionIndex].answer;
+      } else {
+        secondsLeft = secondsLeft - penalty;
+        createDiv.textContent =
+          "Wrong Answer. The Correct answer is: " +
+          questions[questionIndex].answer;
+      }
+    }
+    questionIndex++;
+
+    if (questionIndex >= questions.length) {
+      done();
+      createDiv.textContent =
+        "End of Quiz!" +
+        " " +
+        "Your Score is : " +
+        score +
+        "/" +
+        questions.length;
+    } else {
+      render(questionIndex);
+    }
+    quesContainer.appendChild(createDiv);
+  }
+}
+// making the display for  when the quiz is finished
+function done() {
+  quesContainer.innerHTML = "";
+  timer.innerHTML = "";
+
+  var createH1 = document.createElement("h1");
+  createH1.setAttribute("id", "newH1");
+  createH1.textContent = "All Done!";
+
+  quesContainer.appendChild(createH1);
+
+  var createP = document.createElement("p");
+  createP.setAttribute("id", "newP");
+
+  quesContainer.appendChild(createP);
+
+  //we add the remaining seconds as score
+  if (secondsLeft >= 0) {
+    var timeRemaining = secondsLeft;
+    var createP2 = document.createElement("p");
+    clearInterval(holdTimer);
+    createP2.textContent = "Your final score is: " + timeRemaining;
+
+    quesContainer.appendChild(createP2);
+  }
+
+  // Label for input
+  var createLabel = document.createElement("label");
+  createLabel.setAttribute("id", "createLabel");
+  createLabel.textContent = "Enter your initials: ";
+
+  quesContainer.appendChild(createLabel);
+
+  // input for saving intials
+  var createInput = document.createElement("input");
+  createInput.setAttribute("type", "text");
+  createInput.setAttribute("id", "initials");
+  createInput.textContent = "";
+
+  quesContainer.appendChild(createInput);
+
+  // submit to submit score and intials
+  var createSubmit = document.createElement("button");
+  createSubmit.setAttribute("type", "submit");
+  createSubmit.setAttribute("id", "Submit");
+  createSubmit.textContent = "Submit";
+
+  quesContainer.appendChild(createSubmit);
+
+  createSubmit.addEventListener("click", function () {
+    var intials = createInput.value;
+
+    if (initals === null) {
+      console.log("No Value Entered!");
+    } else {
+      var finalScore = {
+        intials: intials,
+        score: timeRemaining,
+      };
+      console.log(finalScore);
+      var allScores = localStorage.getItem("allscores");
+      if (allScores === null) {
+        allScores = [];
+      } else {
+        allScores = JSON.parse(allScores);
+      }
+      allScores.push(finalScore);
+      var newScore = JSON.stringify(allScores);
+      localStorage.setItem("allScores", newScore);
+      // moves to scores page
+      window.location.replace("./Highscores.html");
+    }
+  });
 }
