@@ -48,7 +48,7 @@ startTimer.addEventListener("click", function () {
     // setting interval of 1s and then reducing timer by 1s
     holdTimer = setInterval(function () {
       secondsLeft--;
-      timer.textContent = "Time: " + secondsLeft + "seconds left";
+      timer.textContent = "Time: " + secondsLeft;
 
       if (secondsLeft <= 0) {
         clearInterval(holdTimer);
@@ -65,53 +65,52 @@ function render(questionIndex) {
   ulCreate.innerHTML = "";
   for (var i = 0; i <= questions.length; i++) {
     var userQuestion = questions[questionIndex].ques;
-    var UserChoice = questions[questionIndex].choices;
+    var userChoices = questions[questionIndex].choices;
     quesContainer.textContent = userQuestion;
   }
   //appending choices in a list
-  UserChoice.forEach(function (newChoice) {
+  userChoices.forEach(function (newItem) {
     var listChoice = document.createElement("li");
-    listChoice.textContent = newChoice;
+    listChoice.textContent = newItem;
     quesContainer.appendChild(ulCreate);
     ulCreate.appendChild(listChoice);
     listChoice.addEventListener("click", compare);
   });
-
-  // comapring the userchoice to correct answer
-  function compare(event) {
-    var selection = event.target;
-    if (selection.matches("li")) {
-      var createDiv = document.createElement("div");
-      createDiv.setAttribute("id", "newDiv");
-      if (selection.textContent === questions[questionIndex].answer) {
-        score++;
-        createDiv.textContent =
-          "You got it Correct! The answer is: " +
-          questions[questionIndex].answer;
-      } else {
-        secondsLeft = secondsLeft - penalty;
-        createDiv.textContent =
-          "Wrong Answer. The Correct answer is: " +
-          questions[questionIndex].answer;
-      }
-    }
-    questionIndex++;
-
-    if (questionIndex >= questions.length) {
-      done();
-      createDiv.textContent =
-        "End of Quiz!" +
-        " " +
-        "Your Score is : " +
-        score +
-        "/" +
-        questions.length;
-    } else {
-      render(questionIndex);
-    }
-    quesContainer.appendChild(createDiv);
-  }
 }
+// comapring the userchoice to correct answer
+function compare(event) {
+  var selection = event.target;
+  if (selection.matches("li")) {
+    var createDiv = document.createElement("div");
+    createDiv.setAttribute("id", "newDiv");
+    if (selection.textContent === questions[questionIndex].answer) {
+      score++;
+      createDiv.textContent =
+        "You got it Correct! The answer is: " + questions[questionIndex].answer;
+    } else {
+      secondsLeft = secondsLeft - penalty;
+      createDiv.textContent =
+        "Wrong Answer. The Correct answer is: " +
+        questions[questionIndex].answer;
+    }
+  }
+  questionIndex++;
+
+  if (questionIndex >= questions.length) {
+    done();
+    createDiv.textContent =
+      "End of Quiz!" +
+      " " +
+      "Your Score is : " +
+      score +
+      "/" +
+      questions.length;
+  } else {
+    render(questionIndex);
+  }
+  quesContainer.appendChild(createDiv);
+}
+
 // making the display for  when the quiz is finished
 function done() {
   quesContainer.innerHTML = "";
@@ -168,7 +167,7 @@ function done() {
       console.log("No Value Entered!");
     } else {
       var finalScore = {
-        intials: intials,
+        initials: initials,
         score: timeRemaining,
       };
       console.log(finalScore);
