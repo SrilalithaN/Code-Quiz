@@ -38,8 +38,8 @@
 
 ## Assets:
 
-The following is the link to deployed code in github:
-The following is the link to deployed page of the application:
+The following is the link to deployed code in github: https://github.com/SrilalithaN/Code-Quiz
+The following is the link to deployed page of the application: https://srilalithan.github.io/Code-Quiz/
 
 ## Credits :
 
