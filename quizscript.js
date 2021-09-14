@@ -35,11 +35,11 @@ var questionIndex = 0;
 var score = 0;
 var ulCreate = document.createElement("ul");
 var startTimer = document.querySelector("#start");
-var questions = document.querySelector("#quesContainer");
+var questionsContainer = document.querySelector("#quesContainer");
 var wrapper = document.querySelector("#wrapper");
 var timer = document.querySelector("#timer-clock");
 //declared variables for timer
-var secondsLeft = 75;
+var secondsLeft = 76;
 var holdTimer = 0;
 var penalty = 10;
 //Timer starts on the click of start button
@@ -61,18 +61,19 @@ startTimer.addEventListener("click", function () {
 });
 
 function render(questionIndex) {
-  quesContainer.innerHTML = "";
+  questionsContainer.innerHTML = "";
   ulCreate.innerHTML = "";
-  for (var i = 0; i <= questions.length; i++) {
-    var userQuestion = questions[questionIndex].ques;
-    var userChoices = questions[questionIndex].choices;
-    quesContainer.textContent = userQuestion;
-  }
+
+  var userQuestion = questions[questionIndex].ques;
+  var userChoices = questions[questionIndex].choices;
+  questionsContainer.textContent = userQuestion;
+
   //appending choices in a list
+
   userChoices.forEach(function (newItem) {
     var listChoice = document.createElement("li");
     listChoice.textContent = newItem;
-    quesContainer.appendChild(ulCreate);
+    questionsContainer.appendChild(ulCreate);
     ulCreate.appendChild(listChoice);
     listChoice.addEventListener("click", compare);
   });
@@ -108,24 +109,24 @@ function compare(event) {
   } else {
     render(questionIndex);
   }
-  quesContainer.appendChild(createDiv);
+  questionsContainer.appendChild(createDiv);
 }
 
 // making the display for  when the quiz is finished
 function done() {
-  quesContainer.innerHTML = "";
+  questionsContainer.innerHTML = "";
   timer.innerHTML = "";
 
   var createH1 = document.createElement("h1");
   createH1.setAttribute("id", "newH1");
   createH1.textContent = "All Done!";
 
-  quesContainer.appendChild(createH1);
+  questionsContainer.appendChild(createH1);
 
   var createP = document.createElement("p");
   createP.setAttribute("id", "newP");
 
-  quesContainer.appendChild(createP);
+  questionsContainer.appendChild(createP);
 
   //we add the remaining seconds as score
   if (secondsLeft >= 0) {
@@ -134,7 +135,7 @@ function done() {
     clearInterval(holdTimer);
     createP2.textContent = "Your final score is: " + timeRemaining;
 
-    quesContainer.appendChild(createP2);
+    questionsContainer.appendChild(createP2);
   }
 
   // Label for input
@@ -142,7 +143,7 @@ function done() {
   createLabel.setAttribute("id", "createLabel");
   createLabel.textContent = "Enter your initials: ";
 
-  quesContainer.appendChild(createLabel);
+  questionsContainer.appendChild(createLabel);
 
   // input for saving intials
   var createInput = document.createElement("input");
@@ -150,7 +151,7 @@ function done() {
   createInput.setAttribute("id", "initials");
   createInput.textContent = "";
 
-  quesContainer.appendChild(createInput);
+  questionsContainer.appendChild(createInput);
 
   // submit to submit score and intials
   var createSubmit = document.createElement("button");
@@ -158,12 +159,12 @@ function done() {
   createSubmit.setAttribute("id", "Submit");
   createSubmit.textContent = "Submit";
 
-  quesContainer.appendChild(createSubmit);
+  questionsContainer.appendChild(createSubmit);
 
   createSubmit.addEventListener("click", function () {
-    var intials = createInput.value;
+    var initials = createInput.value;
 
-    if (initals === null) {
+    if (initials === null) {
       console.log("No Value Entered!");
     } else {
       var finalScore = {
@@ -171,7 +172,7 @@ function done() {
         score: timeRemaining,
       };
       console.log(finalScore);
-      var allScores = localStorage.getItem("allscores");
+      var allScores = localStorage.getItem("allScores");
       if (allScores === null) {
         allScores = [];
       } else {
@@ -181,7 +182,7 @@ function done() {
       var newScore = JSON.stringify(allScores);
       localStorage.setItem("allScores", newScore);
       // moves to scores page
-      window.location.replace("./Highscores.html");
+      window.location.replace("./highscores.html");
     }
   });
 }
